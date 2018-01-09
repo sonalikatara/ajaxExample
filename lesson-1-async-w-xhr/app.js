@@ -37,11 +37,17 @@
 		let htmlContent='';
 		var article = '';
 		var dataArticle = JSON.parse(this.responseText);
-		for(var i=0; i<dataArticle.response.docs.length; i++){
-			article = dataArticle.response.docs[i];
-			htmlContent += '<div><a href="' + article.web_url +"'>" +  article.web_url + "</a><p>" + article.snippet + "</p></div>";
+		if(dataArticle.response && dataArticle.response.docs && dataArticle.response.docs.length > 1 ){
+			htmlContent = "<ul>";
+			for(var i=0; i<dataArticle.response.docs.length; i++){
+				article = dataArticle.response.docs[i];
+				htmlContent += '<li class="article"><h2><a href="' + article.web_url +'">' +  article.web_url + '</a></h2><p>' + article.snippet + '</p></li>';
+			}
+		} else {
+			htmlContent = '<li class="error-no-articles">No articles available</li>';
 		}
-		responseContainer.insertAdjacentHTML('afterBegin',htmlContent);
+		htmlContent +="</ul>";
+		responseContainer.insertAdjacentHTML('beforeend',htmlContent);
 	}
 
 })();
